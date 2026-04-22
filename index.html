@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ubuntu – The OS of the Future</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --dark: #1A1A1A;
+    --purple: #7B5EA7;
+    --lilac: #C4A8E0;
+    --orange: #E8622A;
+    --grid: rgba(100,80,150,0.07);
+    --soft: #EDE5D8;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #1A1A1A;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* ── Deck container ── */
+  #deck {
+    width: 100%; height: 100%;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,.7);
+  }
+
+  /* ── Slide base ── */
+  .slide {
+    width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0;
+    background: var(--cream);
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .55s ease;
+    overflow: hidden;
+  }
+  .slide.active { opacity: 1; pointer-events: all; }
+
+  /* Grid texture */
+  .slide::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  /* ── NAVIGATION ── */
+  #nav {
+    position: absolute;
+    bottom: 18px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; align-items: center;
+    z-index: 100;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.3);
+    cursor: pointer;
+    transition: background .3s, transform .3s;
+  }
+  .dot.active { background: var(--lilac); transform: scale(1.4); }
+
+  .nav-btn {
+    background: none; border: 1.5px solid rgba(255,255,255,.25);
+    color: #fff; width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, border-color .2s;
+  }
+  .nav-btn:hover { background: var(--purple); border-color: var(--purple); }
+
+  /* Page number badge */
+  .page-badge {
+    position: absolute; bottom: 18px; right: 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--purple);
+    letter-spacing: .05em;
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 1 – HERO
+  ────────────────────────────────────────── */
+  #slide-1 {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .s1-left {
+    flex: 0 0 55%; padding: 52px 48px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; z-index: 2;
+  }
+  .logo-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 36px;
+  }
+  .logo-circle {
+    width: 36px; height: 36px;
+    border: 2px solid var(--dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .logo-circle::after {
+    content: '';
+    width: 14px; height: 14px;
+    border: 2px solid var(--dark);
+    border-radius: 50%;
+    position: absolute;
+  }
+  .logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .12em;
+    line-height: 1.5; color: var(--dark);
+    text-transform: uppercase;
+  }
+  .s1-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .s1-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px; line-height: .92;
+    color: var(--dark);
+    letter-spacing: .01em;
+    margin-bottom: 18px;
+  }
+  .s1-title span { color: var(--purple); }
+  .s1-body {
+    font-size: 13px; line-height: 1.7;
+    color: #555; max-width: 320px;
+    margin-bottom: 28px;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--dark);
+    padding: 8px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--dark);
+    cursor: pointer;
+    transition: background .25s, color .25s;
+    width: fit-content;
+  }
+  .pill:hover { background: var(--dark); color: var(--cream); }
+  .pill-arrow { font-size: 14px; }
+
+  .s1-right {
+    flex: 1; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    height: 100%;
+  }
+
+  /* Isometric Ubuntu logo illustration */
+  .iso-wrap {
+    position: relative; width: 280px; height: 280px;
+  }
+  .iso-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 18px solid;
+    animation: spin-ring linear infinite;
+  }
+  .ring-1 {
+    width: 220px; height: 220px;
+    top: 30px; left: 30px;
+    border-color: var(--purple) transparent var(--purple) transparent;
+    animation-duration: 12s;
+  }
+  .ring-2 {
+    width: 160px; height: 160px;
+    top: 60px; left: 60px;
+    border-color: transparent var(--lilac) transparent var(--lilac);
+    animation-duration: 9s;
+    animation-direction: reverse;
+  }
+  .ring-3 {
+    width: 100px; height: 100px;
+    top: 90px; left: 90px;
+    border-color: var(--orange) transparent transparent transparent;
+    animation-duration: 6s;
+  }
+  .iso-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px;
+    background: var(--dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: var(--cream);
+    letter-spacing: .05em;
+    text-align: center; line-height: 1.4;
+  }
+
+  /* Floating dots */
+  .fdot {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--purple);
+    opacity: .5;
+    animation: float-dot 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes spin-ring {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes float-dot {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-14px); }
+  }
+
+  /* Top nav strip */
+  .topnav {
+    position: absolute; top: 0; right: 0;
+    display: flex; gap: 28px; padding: 22px 28px;
+    z-index: 10;
+  }
+  .topnav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--dark);
+    text-decoration: none; opacity: .6;
+    transition: opacity .2s;
+  }
+  .topnav a:hover { opacity: 1; }
+
+  /* Purple accent bar */
+  .accent-bar {
+    position: absolute; top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: linear-gradient(180deg, var(--purple), var(--orange));
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 2 – WHAT IS UBUNTU
+  ────────────────────────────────────────── */
+  #slide-2 { flex-direction: column; }
+
+  .s2-header {
+    padding: 40px 56px 0;
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    position: relative; z-index: 2;
+  }
+  .big-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px; line-height: 1;
+    color: var(--dark);
+  }
+  .big-label em { color: var(--purple); font-style: normal; }
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--purple);
+    border: 1px solid var(--lilac);
+    padding: 6px 12px;
+    margin-bottom: 8px;
+  }
+
+  .s2-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    padding: 24px 56px 40px;
+    position: relative; z-index: 2;
+  }
+  .s2-card {
+    border: 1px solid rgba(100,80,150,.15);
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background .3s;
+  }
+  .s2-card:hover { background: rgba(123,94,167,.05); }
+  .s2-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px; color: var(--lilac);
+    opacity: .3; position: absolute;
+    bottom: 8px; right: 12px;
+    line-height: 1;
+  }
+  .s2-card-icon {
+    font-size: 28px; margin-bottom: 12px;
+  }
+  .s2-card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .s2-card-body {
+    font-size: 12px; line-height: 1.65;
+    color: #666;
+  }
+
+  /* diagonal stripe accent */
+  .stripe-accent {
+    position: absolute;
+    width: 3px; height: 60px;
+    background: var(--purple);
+    top: 0; left: 0;
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 3 – HISTORY TIMELINE
+  ────────────────────────────────────────── */
+  #slide-3 {
+    flex-direction: row;
+    background: var(--dark);
+  }
+  #slide-3::before {
+    background-image:
+      linear-gradient(rgba(123,94,167,.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,94,167,.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .s3-left {
+    flex: 0 0 38%;
+    padding: 50px 40px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; z-index: 2;
+    border-right: 1px solid rgba(123,94,167,.2);
+  }
+  .s3-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--lilac); margin-bottom: 14px;
+  }
+  .s3-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; line-height: .95;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .s3-title span { color: var(--orange); }
+  .s3-body {
+    font-size: 12px; line-height: 1.7;
+    color: rgba(255,255,255,.5);
+    max-width: 260px;
+  }
+
+  .s3-right {
+    flex: 1;
+    padding: 40px 44px;
+    overflow-y: auto;
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 0;
+  }
+
+  .tl-item {
+    display: grid;
+    grid-template-columns: 80px 20px 1fr;
+    gap: 0 16px;
+    align-items: start;
+    padding: 10px 0;
+    position: relative;
+  }
+  .tl-item::after {
+    content: '';
+    position: absolute;
+    left: calc(80px + 26px);
+    top: 28px; bottom: -10px;
+    width: 1px;
+    background: rgba(123,94,167,.3);
+  }
+  .tl-item:last-child::after { display: none; }
+
+  .tl-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--lilac);
+    text-align: right;
+    padding-top: 2px;
+  }
+  .tl-dot-col {
+    display: flex; flex-direction: column;
+    align-items: center; padding-top: 6px;
+  }
+  .tl-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+  }
+  .tl-content {}
+  .tl-version {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; color: var(--orange);
+    letter-spacing: .08em; margin-bottom: 2px;
+  }
+  .tl-desc {
+    font-size: 12px; color: rgba(255,255,255,.65);
+    line-height: 1.5;
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 4 – FEATURES STATS
+  ────────────────────────────────────────── */
+  #slide-4 { flex-direction: column; }
+
+  .s4-top {
+    padding: 40px 56px 0;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    z-index: 2; position: relative;
+  }
+  .s4-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; color: var(--dark);
+    line-height: .95;
+  }
+  .s4-title em { color: var(--purple); font-style: normal; }
+
+  .s4-stats {
+    display: flex; gap: 32px;
+    align-items: flex-end;
+  }
+  .stat-block {
+    text-align: right;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px; color: var(--dark);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .1em;
+    text-transform: uppercase; color: #888;
+  }
+
+  .s4-features {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    padding: 20px 56px 40px;
+    z-index: 2; position: relative;
+  }
+  .feat-card {
+    border-top: 2px solid var(--dark);
+    padding: 20px 16px 16px;
+    position: relative;
+    transition: border-color .3s;
+  }
+  .feat-card:hover { border-color: var(--purple); }
+  .feat-card:hover .feat-icon { color: var(--purple); }
+  .feat-icon {
+    font-size: 30px; margin-bottom: 14px;
+    transition: color .3s;
+  }
+  .feat-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--dark); margin-bottom: 8px;
+  }
+  .feat-desc {
+    font-size: 11.5px; line-height: 1.65;
+    color: #666;
+  }
+  .feat-tag {
+    position: absolute; top: 12px; right: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: .08em;
+    color: var(--purple); opacity: .6;
+    text-transform: uppercase;
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 5 – FLAVORS / EDITIONS
+  ────────────────────────────────────────── */
+  #slide-5 { flex-direction: row; }
+
+  .s5-left {
+    flex: 0 0 42%;
+    background: var(--purple);
+    padding: 50px 44px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    position: relative; overflow: hidden;
+    z-index: 2;
+  }
+  .s5-left::after {
+    content: 'UBUNTU';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px; color: rgba(255,255,255,.06);
+    bottom: -10px; left: -10px;
+    line-height: 1;
+  }
+  .s5-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px; color: #fff;
+    line-height: .95;
+    position: relative; z-index: 2;
+  }
+  .s5-sub {
+    font-size: 13px; color: rgba(255,255,255,.7);
+    line-height: 1.7; max-width: 240px;
+    position: relative; z-index: 2;
+  }
+  .s5-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--purple);
+    background: #fff;
+    padding: 6px 14px;
+    position: relative; z-index: 2;
+    width: fit-content;
+  }
+
+  .s5-right {
+    flex: 1;
+    padding: 40px 44px;
+    display: flex; flex-direction: column;
+    justify-content: center; gap: 10px;
+    position: relative; z-index: 2;
+  }
+
+  .flavor-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 16px;
+    border: 1px solid rgba(100,80,150,.12);
+    position: relative;
+    transition: background .25s, border-color .25s;
+    cursor: default;
+  }
+  .flavor-row:hover { background: rgba(123,94,167,.06); border-color: var(--purple); }
+  .flavor-icon { font-size: 22px; flex-shrink: 0; }
+  .flavor-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: var(--dark);
+    flex: 0 0 150px;
+  }
+  .flavor-desc { font-size: 11.5px; color: #777; line-height: 1.5; flex: 1; }
+  .flavor-de {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: .1em;
+    color: var(--purple);
+    border: 1px solid var(--lilac);
+    padding: 3px 8px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* ──────────────────────────────────────────
+     SLIDE 6 – TERMINAL / COMMANDS
+  ────────────────────────────────────────── */
+  #slide-6 {
+    background: #0D0D0D;
+    flex-direction: column;
+  }
+  #slide-6::before {
+    background-image:
+      linear-gradient(rgba(232,98,42,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,98,42,.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .s6-top {
+    padding: 38px 56px 0;
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    z-index: 2; position: relative;
+  }
+  .s6-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; color: #fff; line-height: .95;
+  }
+  .s6-title span { color: var(--orange); }
+  .terminal-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--orange);
+    border: 1px solid rgba(232,98,42,.3);
+    padding: 6px 12px;
+    margin-bottom: 8px;
+  }
+
+  .s6-body {
+    flex: 1;
+    padding: 24px 56px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    z-index: 2; position: relative;
+  }
+
+  .terminal-block {
+    background: #111;
+    border: 1px solid rgba(232,98,42,.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .terminal-bar {
+    background: #1a1a1a;
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(232,98,42,.1);
+  }
+  .tbar-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .td-red   { background: #FF5F57; }
+  .td-yel   { background: #FFBD2E; }
+  .td-grn   { background: #28CA41; }
+  .terminal-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: rgba(255,255,255,.3);
+    letter-spacing: .1em; margin-left: 6px;
+  }
+  .terminal-body {
+    padding: 14px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; line-height: 2;
+  }
+  .cmd-line::before { content: '$ '; color: var(--orange); }
+  .cmd-line { color: rgba(255,255,255,.85); }
+  .cmd-out  { color: rgba(255,255,255,.35); padding-left: 14px; font-size: 10px; }
+  .cmd-highlight { color: #7BE28A; }
+  .cmd-comment { color: rgba(255,255,255,.2); }
+
+  /* ──────────────────────────────────────────
+     SLIDE 7 – CLOSING / CTA
+  ────────────────────────────────────────── */
+  #slide-7 {
+    flex-direction: row;
+    background: var(--cream);
+  }
+
+  .s7-left {
+    flex: 1;
+    padding: 50px 56px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; z-index: 2;
+  }
+  .s7-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 90px; line-height: .9;
+    color: var(--dark);
+    margin-bottom: 24px;
+  }
+  .s7-big span { color: var(--purple); }
+  .s7-quote {
+    font-size: 13px; line-height: 1.8;
+    color: #555; max-width: 340px;
+    border-left: 3px solid var(--purple);
+    padding-left: 16px;
+    margin-bottom: 32px;
+  }
+  .s7-links {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .link-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1.5px solid var(--dark);
+    color: var(--dark);
+    text-decoration: none;
+    transition: background .25s, color .25s;
+  }
+  .link-pill:hover, .link-pill.filled {
+    background: var(--purple); color: #fff; border-color: var(--purple);
+  }
+
+  .s7-right {
+    flex: 0 0 42%;
+    background: var(--dark);
+    display: flex; align-items: center;
+    justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .s7-right::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(123,94,167,.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,94,167,.1) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .ubuntu-logo-svg {
+    position: relative; z-index: 2;
+    width: 180px; height: 180px;
+  }
+
+  /* Animated concentric circles */
+  .concentric {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1;
+  }
+  .cc {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(123,94,167,.2);
+    animation: cc-expand 4s ease-out infinite;
+  }
+  @keyframes cc-expand {
+    0%   { transform: scale(.8); opacity: .6; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  /* ── Slide-in animation for content ── */
+  .slide.active .animate-in {
+    animation: slide-up .6s ease forwards;
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .delay-1 { animation-delay: .1s; opacity: 0; }
+  .delay-2 { animation-delay: .2s; opacity: 0; }
+  .delay-3 { animation-delay: .35s; opacity: 0; }
+  .delay-4 { animation-delay: .5s; opacity: 0; }
+
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- ═══════════ SLIDE 1 ═══════════ -->
+  <div class="slide active" id="slide-1">
+    <div class="accent-bar"></div>
+
+    <div class="topnav">
+      <a href="#">Overview</a>
+      <a href="#">History</a>
+      <a href="#">Features</a>
+      <a href="#">Community</a>
+    </div>
+
+    <div class="s1-left">
+      <div class="logo-row animate-in delay-1">
+        <div class="logo-circle"></div>
+        <div class="logo-text">OPEN<br>SOURCE</div>
+      </div>
+      <div class="s1-eyebrow animate-in delay-1">Linux Distribution · Est. 2004</div>
+      <div class="s1-title animate-in delay-2"><span>UBUNTU</span><br>LINUX</div>
+      <p class="s1-body animate-in delay-3">
+        Ubuntu is a free, open-source Linux distribution based on Debian. Designed for ease of use, security, and performance — trusted by millions of developers, enterprises, and governments worldwide.
+      </p>
+      <div class="pill animate-in delay-4">
+        Explore the Slides <span class="pill-arrow">→</span>
+      </div>
+    </div>
+
+    <div class="s1-right">
+      <div class="iso-wrap animate-in delay-2">
+        <div class="iso-ring ring-1"></div>
+        <div class="iso-ring ring-2"></div>
+        <div class="iso-ring ring-3"></div>
+        <div class="iso-center">UBUNTU<br>24.04 LTS</div>
+      </div>
+      <!-- Floating decorative dots -->
+      <div class="fdot" style="width:10px;height:10px;top:80px;right:60px;animation-delay:.5s;"></div>
+      <div class="fdot" style="width:6px;height:6px;top:200px;right:30px;background:var(--orange);animation-delay:1s;"></div>
+      <div class="fdot" style="width:14px;height:14px;bottom:80px;right:110px;opacity:.3;animation-delay:.2s;"></div>
+    </div>
+
+    <div class="page-badge">Page 01</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 2 ═══════════ -->
+  <div class="slide" id="slide-2">
+    <div class="accent-bar"></div>
+    <div class="s2-header">
+      <div>
+        <div class="big-label animate-in delay-1">WHAT IS <em>UBUNTU</em>?</div>
+      </div>
+      <div class="section-tag animate-in delay-1">Section 01</div>
+    </div>
+    <div class="s2-grid">
+      <div class="s2-card animate-in delay-2">
+        <div class="stripe-accent"></div>
+        <div class="s2-card-icon">🐧</div>
+        <div class="s2-card-title">Linux-Based OS</div>
+        <div class="s2-card-body">Built on the Linux kernel and the Debian architecture, Ubuntu inherits decades of open-source engineering excellence and community development.</div>
+        <div class="s2-card-num">01</div>
+      </div>
+      <div class="s2-card animate-in delay-3">
+        <div class="stripe-accent" style="background:var(--orange)"></div>
+        <div class="s2-card-icon">🌍</div>
+        <div class="s2-card-title">Global Community</div>
+        <div class="s2-card-body">Developed by Canonical Ltd. and a global community of contributors. Available in 55+ languages with millions of active users across 200+ countries.</div>
+        <div class="s2-card-num">02</div>
+      </div>
+      <div class="s2-card animate-in delay-4">
+        <div class="stripe-accent" style="background:var(--lilac)"></div>
+        <div class="s2-card-icon">🔐</div>
+        <div class="s2-card-title">Secure & Free</div>
+        <div class="s2-card-body">100% free to download, use, and distribute. Regular security patches, LTS releases with 5-year support, and no licensing costs — ever.</div>
+        <div class="s2-card-num">03</div>
+      </div>
+    </div>
+    <div class="page-badge">Page 02</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 3 ═══════════ -->
+  <div class="slide" id="slide-3">
+    <div class="s3-left">
+      <div class="s3-eyebrow animate-in delay-1">A 20-Year Journey</div>
+      <div class="s3-title animate-in delay-2">HISTORY<br>&amp; <span>VERSIONS</span></div>
+      <p class="s3-body animate-in delay-3">From its humble 2004 debut, Ubuntu has grown into the world's most popular Linux distribution, powering desktops, servers, and the cloud.</p>
+    </div>
+    <div class="s3-right animate-in delay-2">
+      <div class="tl-item">
+        <div class="tl-year">2004</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-version">Ubuntu 4.10 · Warty Warthog</div>
+          <div class="tl-desc">The very first Ubuntu release, founded by Mark Shuttleworth and Canonical, based on Debian.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2006</div>
+        <div class="tl-dot-col"><div class="tl-dot"></div></div>
+        <div class="tl-content">
+          <div class="tl-version">Ubuntu 6.06 LTS · Dapper Drake</div>
+          <div class="tl-desc">First Long-Term Support release, establishing Ubuntu's enterprise credibility.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2011</div>
+        <div class="tl-dot-col"><div class="tl-dot" style="background:var(--lilac)"></div></div>
+        <div class="tl-content">
+          <div class="tl-version">Ubuntu 11.04 · Natty Narwhal</div>
+          <div class="tl-desc">Introduced Unity desktop, marking a bold UI redesign aimed at touch and convergence.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2018</div>
+        <div class="tl-dot-col"><div class="tl-dot" style="background:var(--purple)"></div></div>
+        <div class="tl-content">
+          <div class="tl-version">Ubuntu 18.04 LTS · Bionic Beaver</div>
+          <div class="tl-desc">Returned to GNOME desktop. Snap packages introduced widely for app distribution.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024</div>
+        <div class="tl-dot-col"><div class="tl-dot" style="background:#28CA41"></div></div>
+        <div class="tl-content">
+          <div class="tl-version">Ubuntu 24.04 LTS · Noble Numbat</div>
+          <div class="tl-desc">Latest LTS with GNOME 46, improved hardware support, and next-gen cloud tooling.</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-badge" style="color:var(--lilac)">Page 03</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 4 ═══════════ -->
+  <div class="slide" id="slide-4">
+    <div class="accent-bar"></div>
+    <div class="s4-top">
+      <div class="s4-title animate-in delay-1">KEY <em>FEATURES</em></div>
+      <div class="s4-stats animate-in delay-2">
+        <div class="stat-block">
+          <div class="stat-num">90%</div>
+          <div class="stat-label">Cloud Workloads</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">5yr</div>
+          <div class="stat-label">LTS Support</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">50K+</div>
+          <div class="stat-label">Packages</div>
+        </div>
+      </div>
+    </div>
+    <div class="s4-features">
+      <div class="feat-card animate-in delay-2">
+        <div class="feat-tag">Core</div>
+        <div class="feat-icon">⚡</div>
+        <div class="feat-name">Performance</div>
+        <div class="feat-desc">Optimized kernel with low-latency patches for both desktop productivity and server workloads.</div>
+      </div>
+      <div class="feat-card animate-in delay-3">
+        <div class="feat-tag">System</div>
+        <div class="feat-icon">🛡️</div>
+        <div class="feat-name">Security</div>
+        <div class="feat-desc">AppArmor, UFW firewall, automatic security updates, and full disk encryption by default.</div>
+      </div>
+      <div class="feat-card animate-in delay-3">
+        <div class="feat-tag">Dev</div>
+        <div class="feat-icon">🛠️</div>
+        <div class="feat-name">Dev Tools</div>
+        <div class="feat-desc">First-class support for Docker, Kubernetes, Python, Go, Rust, and every major programming environment.</div>
+      </div>
+      <div class="feat-card animate-in delay-4">
+        <div class="feat-tag">Cloud</div>
+        <div class="feat-icon">☁️</div>
+        <div class="feat-name">Cloud-Native</div>
+        <div class="feat-desc">The #1 OS on AWS, Azure, and GCP. Optimized images, Ubuntu Pro, and enterprise-grade cloud support.</div>
+      </div>
+    </div>
+    <div class="page-badge">Page 04</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 5 ═══════════ -->
+  <div class="slide" id="slide-5">
+    <div class="s5-left">
+      <div>
+        <div class="s5-badge animate-in delay-1">Ubuntu Family</div>
+        <div class="s5-heading animate-in delay-2">CHOOSE<br>YOUR<br>FLAVOR</div>
+      </div>
+      <p class="s5-sub animate-in delay-3">Every variant of Ubuntu shares the same rock-solid core — only the desktop environment and focus changes. Find the one that fits you.</p>
+    </div>
+    <div class="s5-right">
+      <div class="flavor-row animate-in delay-2">
+        <div class="flavor-icon">🟠</div>
+        <div class="flavor-name">Ubuntu</div>
+        <div class="flavor-desc">Default GNOME desktop. Best for new users and developers.</div>
+        <div class="flavor-de">GNOME</div>
+      </div>
+      <div class="flavor-row animate-in delay-2">
+        <div class="flavor-icon">🔵</div>
+        <div class="flavor-name">Kubuntu</div>
+        <div class="flavor-desc">Beautiful KDE Plasma desktop with deep customization.</div>
+        <div class="flavor-de">KDE</div>
+      </div>
+      <div class="flavor-row animate-in delay-3">
+        <div class="flavor-icon">🟤</div>
+        <div class="flavor-name">Xubuntu</div>
+        <div class="flavor-desc">Lightweight XFCE desktop, perfect for older hardware.</div>
+        <div class="flavor-de">XFCE</div>
+      </div>
+      <div class="flavor-row animate-in delay-3">
+        <div class="flavor-icon">🟢</div>
+        <div class="flavor-name">Ubuntu Server</div>
+        <div class="flavor-desc">Headless powerhouse for cloud, containers, and bare metal.</div>
+        <div class="flavor-de">CLI</div>
+      </div>
+      <div class="flavor-row animate-in delay-4">
+        <div class="flavor-icon">🔴</div>
+        <div class="flavor-name">Ubuntu Studio</div>
+        <div class="flavor-desc">Audio, video, and graphics production out of the box.</div>
+        <div class="flavor-de">KDE / RT</div>
+      </div>
+    </div>
+    <div class="page-badge">Page 05</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 6 ═══════════ -->
+  <div class="slide" id="slide-6">
+    <div class="s6-top">
+      <div>
+        <div class="terminal-tag animate-in delay-1">Terminal Power</div>
+        <div class="s6-title animate-in delay-2">ESSENTIAL <span>COMMANDS</span></div>
+      </div>
+    </div>
+    <div class="s6-body">
+      <div class="terminal-block animate-in delay-2">
+        <div class="terminal-bar">
+          <div class="tbar-dot td-red"></div>
+          <div class="tbar-dot td-yel"></div>
+          <div class="tbar-dot td-grn"></div>
+          <span class="terminal-title">system-update.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd-comment"># Update your system</div>
+          <div class="cmd-line">sudo apt update</div>
+          <div class="cmd-out">Hit:1 http://archive.ubuntu.com noble…</div>
+          <div class="cmd-line">sudo apt upgrade -y</div>
+          <div class="cmd-out cmd-highlight">X packages upgraded successfully.</div>
+          <div class="cmd-line">sudo reboot</div>
+        </div>
+      </div>
+      <div class="terminal-block animate-in delay-3">
+        <div class="terminal-bar">
+          <div class="tbar-dot td-red"></div>
+          <div class="tbar-dot td-yel"></div>
+          <div class="tbar-dot td-grn"></div>
+          <span class="terminal-title">install-docker.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd-comment"># Install Docker CE</div>
+          <div class="cmd-line">curl -fsSL https://get.docker.com | sh</div>
+          <div class="cmd-out cmd-highlight">Docker version 26.1 installed ✓</div>
+          <div class="cmd-line">sudo usermod -aG docker $USER</div>
+          <div class="cmd-line">docker run hello-world</div>
+          <div class="cmd-out">Hello from Docker!</div>
+        </div>
+      </div>
+      <div class="terminal-block animate-in delay-3">
+        <div class="terminal-bar">
+          <div class="tbar-dot td-red"></div>
+          <div class="tbar-dot td-yel"></div>
+          <div class="tbar-dot td-grn"></div>
+          <span class="terminal-title">disk-info.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd-comment"># Check disk usage</div>
+          <div class="cmd-line">df -h</div>
+          <div class="cmd-out">Filesystem  Size  Used  Avail Use%</div>
+          <div class="cmd-out">/dev/sda1    50G   12G    36G  25%</div>
+          <div class="cmd-line">lsblk</div>
+          <div class="cmd-out cmd-highlight">sda  50G disk  └─sda1 50G part /</div>
+        </div>
+      </div>
+      <div class="terminal-block animate-in delay-4">
+        <div class="terminal-bar">
+          <div class="tbar-dot td-red"></div>
+          <div class="tbar-dot td-yel"></div>
+          <div class="tbar-dot td-grn"></div>
+          <span class="terminal-title">snap-install.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="cmd-comment"># Install apps via Snap</div>
+          <div class="cmd-line">snap install code --classic</div>
+          <div class="cmd-out cmd-highlight">VS Code installed (classic) ✓</div>
+          <div class="cmd-line">snap install firefox</div>
+          <div class="cmd-out cmd-highlight">Firefox installed ✓</div>
+          <div class="cmd-line">snap list</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-badge" style="color:var(--orange)">Page 06</div>
+  </div>
+
+  <!-- ═══════════ SLIDE 7 ═══════════ -->
+  <div class="slide" id="slide-7">
+    <div class="accent-bar"></div>
+    <div class="s7-left">
+      <div class="s7-big animate-in delay-1">GET<br><span>UBUNTU</span><br>TODAY</div>
+      <blockquote class="s7-quote animate-in delay-2">
+        "I am what I am because of who we all are." — The Ubuntu Philosophy. A reminder that great software, like great communities, is built together.
+      </blockquote>
+      <div class="s7-links animate-in delay-3">
+        <a class="link-pill filled" href="#">ubuntu.com</a>
+        <a class="link-pill" href="#">Download LTS</a>
+        <a class="link-pill" href="#">Documentation</a>
+        <a class="link-pill" href="#">Community</a>
+      </div>
+    </div>
+    <div class="s7-right">
+      <div class="concentric">
+        <div class="cc" style="width:300px;height:300px;animation-delay:0s;"></div>
+        <div class="cc" style="width:240px;height:240px;animation-delay:.8s;"></div>
+        <div class="cc" style="width:180px;height:180px;animation-delay:1.6s;"></div>
+      </div>
+      <!-- Ubuntu SVG logo -->
+      <svg class="ubuntu-logo-svg animate-in delay-3" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer ring with gaps -->
+        <circle cx="100" cy="100" r="85" fill="none" stroke="#E8622A" stroke-width="16"
+          stroke-dasharray="165 14 165 14" stroke-dashoffset="-7"
+          transform="rotate(-30 100 100)"/>
+        <!-- Three circles -->
+        <circle cx="100" cy="18" r="18" fill="#E8622A"/>
+        <circle cx="182" cy="148" r="18" fill="#E8622A"/>
+        <circle cx="18"  cy="148" r="18" fill="#E8622A"/>
+        <!-- Center -->
+        <text x="100" y="108" text-anchor="middle"
+          font-family="'Bebas Neue', sans-serif"
+          font-size="18" fill="rgba(255,255,255,.6)"
+          letter-spacing="2">UBUNTU</text>
+      </svg>
+    </div>
+    <div class="page-badge">Page 07</div>
+  </div>
+
+  <!-- Navigation -->
+  <div id="nav">
+    <button class="nav-btn" id="prev">‹</button>
+    <div class="dot active" data-i="0"></div>
+    <div class="dot" data-i="1"></div>
+    <div class="dot" data-i="2"></div>
+    <div class="dot" data-i="3"></div>
+    <div class="dot" data-i="4"></div>
+    <div class="dot" data-i="5"></div>
+    <div class="dot" data-i="6"></div>
+    <button class="nav-btn" id="next">›</button>
+  </div>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  let current  = 0;
+
+  function go(n) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    // Re-trigger animations
+    slides[current].querySelectorAll('.animate-in').forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    });
+  }
+
+  document.getElementById('next').onclick = () => go(current + 1);
+  document.getElementById('prev').onclick = () => go(current - 1);
+  dots.forEach(d => d.onclick = () => go(+d.dataset.i));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(current + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(current - 1);
+  });
+</script>
+</body>
+</html>
