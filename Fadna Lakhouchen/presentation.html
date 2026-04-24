@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ubuntu — Tutoriel Complet</title>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,700;1,300&family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --orange:#E95420;
+  --aubergine:#2C001E;
+  --card:#fff;
+  --bg:#EDEAE4;
+  --text:#1a1a1a;
+  --muted:#666;
+  --border:rgba(0,0,0,0.09);
+  --green:#166534;
+  --green-bg:#f0faf4;
+  --red:#991b1b;
+  --red-bg:#fef2f2;
+  --debian:#D32836;
+}
+body{font-family:'Ubuntu',sans-serif;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;}
+.wrap{width:100%;max-width:900px;}
+.pbar{height:4px;background:rgba(233,84,32,0.18);border-radius:3px;margin-bottom:1.2rem;overflow:hidden;}
+.pfill{height:100%;background:var(--orange);border-radius:3px;transition:width .5s ease;}
+.slide{display:none;background:var(--card);border-radius:22px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.13),0 4px 16px rgba(0,0,0,0.07);flex-direction:column;animation:sIn .45s cubic-bezier(.25,.46,.45,.94) forwards;}
+.slide.active{display:flex;}
+.slide.back{animation:sBack .45s cubic-bezier(.25,.46,.45,.94) forwards;}
+@keyframes sIn{from{opacity:0;transform:translateX(36px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes sBack{from{opacity:0;transform:translateX(-36px) scale(.98)}to{opacity:1;transform:none}}
+.hd{padding:2rem 2.5rem 1.6rem;position:relative;overflow:hidden;background:var(--orange);}
+.hd.dark{background:linear-gradient(135deg,var(--aubergine) 0%,#5E0035 55%,var(--orange) 100%);}
+.hd.deb{background:linear-gradient(135deg,#6B0012 0%,var(--debian) 100%);}
+.hd::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.hd::after{content:'';position:absolute;bottom:-35px;left:28%;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.hd-num{font-family:'Ubuntu Mono',monospace;font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:6px;}
+.hd-title{font-size:28px;font-weight:700;color:#fff;line-height:1.15;position:relative;z-index:1;}
+.hd-sub{font-size:13px;color:rgba(255,255,255,0.7);margin-top:5px;font-weight:300;}
+.body{padding:2rem 2.5rem;flex:1;display:flex;flex-direction:column;gap:1.3rem;}
+@keyframes fUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.au{animation:fUp .4s ease forwards;opacity:0;}
+.au1{animation-delay:.08s}.au2{animation-delay:.16s}.au3{animation-delay:.24s}
+.au4{animation-delay:.32s}.au5{animation-delay:.40s}
+.btext{font-size:13.5px;color:var(--muted);line-height:1.8;}
+.btext strong{color:var(--text);}
+.btext code{font-family:'Ubuntu Mono',monospace;background:#f0ede8;padding:1px 5px;border-radius:4px;font-size:12px;}
+.quote{border-left:3px solid var(--orange);padding:10px 16px;background:#fff8f5;border-radius:0 10px 10px 0;font-size:13px;font-style:italic;color:#5a2308;line-height:1.6;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.card{background:#faf9f6;border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.2rem;transition:transform .2s,box-shadow .2s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+.ci{font-size:22px;margin-bottom:7px;}
+.ct{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.cd{font-size:12px;color:var(--muted);line-height:1.6;}
+.hl{border-left:3px solid var(--orange);padding:12px 16px;background:#fff6f2;border-radius:0 10px 10px 0;font-size:13px;color:#5a2308;line-height:1.7;}
+.hl.deb{border-color:var(--debian);background:#fff5f5;color:#7b1d25;}
+.hl strong{color:#3d1608;}
+.hl.deb strong{color:#7b1d25;}
+.hl code{font-family:'Ubuntu Mono',monospace;background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:4px;font-size:12px;}
+.schema{display:flex;flex-direction:column;align-items:center;gap:0;animation:fUp .4s ease .1s forwards;opacity:0;}
+.sbox{width:100%;max-width:460px;border:1px solid var(--border);border-radius:11px;padding:11px 16px;display:flex;align-items:flex-start;gap:11px;background:#faf9f6;font-size:13px;font-weight:500;color:var(--text);}
+.sbox.core{background:#fff3ee;border-color:rgba(233,84,32,.3);color:#5a2308;}
+.sbox-icon{font-size:19px;flex-shrink:0;margin-top:1px;}
+.sbox-text strong{display:block;font-size:13px;}
+.sbox-desc{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px;line-height:1.4;}
+.sarrow{font-size:16px;color:var(--orange);margin:2px 0;opacity:.5;}
+.tree{font-family:'Ubuntu Mono',monospace;font-size:12.5px;background:#1a1a2e;color:#d4d4d4;padding:1.3rem 1.5rem;border-radius:13px;line-height:2;animation:fUp .4s ease .1s forwards;opacity:0;}
+.tree .o{color:var(--orange);font-weight:700;}
+.tree .g{color:#6a9955;}
+.term{background:#1a1a2e;border-radius:13px;overflow:hidden;animation:fUp .4s ease .1s forwards;opacity:0;}
+.tbar{background:#252540;padding:9px 14px;display:flex;gap:6px;align-items:center;}
+.tdot{width:11px;height:11px;border-radius:50%;}
+.tbody{padding:1.3rem 1.5rem;}
+.tline{font-family:'Ubuntu Mono',monospace;font-size:12.5px;line-height:2.1;}
+.tp{color:var(--orange);}
+.tc{color:#7ec8e3;}
+.tg{color:#6a9955;}
+.tsudo{color:#ce9178;}
+.vtable{display:flex;flex-direction:column;gap:0;animation:fUp .4s ease .1s forwards;opacity:0;}
+.vrow{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);}
+.vrow:last-child{border-bottom:none;}
+.vdot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.vdot.lts{background:var(--orange);}
+.vdot.std{background:#ccc;}
+.vn{font-family:'Ubuntu Mono',monospace;font-size:13px;font-weight:700;color:var(--text);min-width:60px;}
+.va{font-size:12.5px;color:var(--muted);flex:1;}
+.vd{font-size:11.5px;color:#aaa;min-width:80px;}
+.vb{font-size:10.5px;padding:3px 10px;border-radius:20px;font-weight:700;}
+.vb.lts{background:#fff0eb;color:var(--orange);border:1px solid rgba(233,84,32,.22);}
+.vb.std{background:#f2f2f2;color:#888;border:1px solid #ddd;}
+.vb.cur{background:#e8f5e9;color:#2e7d32;border:1px solid rgba(46,125,50,.22);}
+.flavors{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;animation:fUp .4s ease .1s forwards;opacity:0;}
+.fcrd{border:1px solid var(--border);border-radius:13px;padding:14px 10px;text-align:center;transition:transform .2s,box-shadow .2s;}
+.fcrd:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+.fi{font-size:26px;margin-bottom:7px;}
+.fn{font-size:12.5px;font-weight:700;color:var(--text);}
+.fd{font-size:11px;color:var(--muted);margin-top:3px;}
+.ftag{font-size:10px;margin-top:5px;padding:2px 8px;border-radius:20px;display:inline-block;font-weight:600;}
+.ftag.light{background:#e8f5e9;color:#2e7d32;}
+.ftag.std{background:#e3f2fd;color:#1565c0;}
+.ftag.heavy{background:#f3e5f5;color:#6a1b9a;}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fUp .4s ease .1s forwards;opacity:0;}
+.pros{background:var(--green-bg);border-radius:13px;padding:1.2rem;border:1px solid rgba(22,101,52,.15);}
+.cons{background:var(--red-bg);border-radius:13px;padding:1.2rem;border:1px solid rgba(153,27,27,.15);}
+.pct{font-size:14px;font-weight:700;margin-bottom:10px;}
+.pros .pct{color:var(--green);}
+.cons .pct{color:var(--red);}
+.pci{font-size:12.5px;line-height:2;color:#444;list-style:none;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.dcompare{display:grid;grid-template-columns:1fr 1fr;gap:14px;animation:fUp .4s ease .2s forwards;opacity:0;}
+.dcard{border-radius:13px;padding:1.2rem;border:1px solid;}
+.dcard.ubu{background:#fff6f2;border-color:rgba(233,84,32,.25);}
+.dcard.deb{background:#fff5f5;border-color:rgba(211,40,54,.25);}
+.dcard-title{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.ubu .dcard-title{color:#5a2308;}
+.deb .dcard-title{color:#7b1d25;}
+.dcard-item{font-size:12.5px;color:#555;line-height:2;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.5rem;border-top:1px solid var(--border);background:#fafaf8;}
+.nbtn{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:9px 20px;font-size:13px;font-family:'Ubuntu',sans-serif;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s;}
+.nbtn:hover:not(:disabled){background:#f5f5f5;border-color:#bbb;transform:scale(1.02);}
+.nbtn:active:not(:disabled){transform:scale(0.98);}
+.nbtn:disabled{opacity:.3;cursor:default;}
+.nbtn.pri{background:var(--orange);border-color:var(--orange);color:#fff;}
+.nbtn.pri:hover{background:#c44418;}
+.dots{display:flex;gap:7px;}
+.dot{width:7px;height:7px;border-radius:50%;background:#ddd;cursor:pointer;transition:all .2s;}
+.dot.active{background:var(--orange);transform:scale(1.4);}
+.ctr{text-align:center;font-size:12px;color:#aaa;margin-top:.8rem;font-family:'Ubuntu Mono',monospace;}
+.hero-title{font-size:46px;font-weight:700;color:#fff;line-height:1.05;}
+.hero-hd{min-height:210px;justify-content:flex-end;display:flex;flex-direction:column;}
+@media(max-width:600px){
+  .hd,.body,.nav{padding-left:1.5rem;padding-right:1.5rem;}
+  .two,.pc,.dcompare{grid-template-columns:1fr;}
+  .hero-title{font-size:32px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="pbar"><div class="pfill" id="pf" style="width:11%"></div></div>
+
+<!-- SLIDE 0 -->
+<div class="slide active" id="s0">
+  <div class="hd dark hero-hd">
+    <div class="hd-num">$ ubuntu --intro</div>
+    <div class="hero-title">Ubuntu</div>
+    <div class="hd-sub">Tutoriel complet — De zéro à l'essentiel 🐧</div>
+  </div>
+  <div class="body" style="align-items: center; justify-content: center; gap: 3rem;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" alt="Ubuntu Logo" style="width: 180px; filter: drop-shadow(0 10px 15px rgba(233,84,32,0.2));" class="au au1">
+    <div class="au au2" style="background: #fff6f2; border: 1px solid rgba(233,84,32,0.2); padding: 1.5rem 3rem; border-radius: 16px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.05);">
+      <div style="font-size: 14px; color: #8a482b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; font-weight: 600;">Présenté par :</div>
+      <div style="font-size: 28px; font-weight: 700; color: #5a2308;">Fadna Lakhouchen</div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" disabled>← Précédent</button>
+    <div class="dots" id="d0"></div>
+    <button class="nbtn pri" onclick="go(1)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 1 -->
+<div class="slide" id="s1">
+  <div class="hd">
+    <div class="hd-num">01 / 08</div>
+    <div class="hd-title">Qu'est-ce que Ubuntu ? 🐧</div>
+    <div class="hd-sub">Un système d'exploitation open-source basé sur Linux</div>
+  </div>
+  <div class="body">
+    <p class="btext au au1"><strong>Ubuntu</strong> est une <strong>distribution Linux</strong> — un système d'exploitation complet bâti autour du noyau Linux. Il est totalement <strong>open-source</strong> et <strong>gratuit</strong>, développé et sponsorisé par l'entreprise <strong>Canonical</strong> depuis 2004.</p>
+    <div class="grid au au2">
+      <div class="card"><div class="ci">🏢</div><div class="ct">Canonical Ltd.</div><div class="cd">Fondée par Mark Shuttleworth en 2004. Elle finance le développement, assure le support commercial et publie chaque nouvelle version.</div></div>
+      <div class="card"><div class="ci">🔱</div><div class="ct">Basé sur Debian</div><div class="cd">Ubuntu hérite du format de paquets <strong>.deb</strong>, des dépôts APT et de la stabilité légendaire de Debian GNU/Linux.</div></div>
+      <div class="card"><div class="ci">🌍</div><div class="ct">Utilisé partout</div><div class="cd">PC personnels, entreprises, serveurs, cloud (AWS, GCP, Azure), IoT, et même la Station Spatiale Internationale !</div></div>
+      <div class="card"><div class="ci">🏆</div><div class="ct">Le plus populaire</div><div class="cd">Distro Linux n°1 sur desktop et serveurs cloud. La communauté répond à presque toutes les questions en ligne.</div></div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(0,1)">← Précédent</button>
+    <div class="dots" id="d1"></div>
+    <button class="nbtn pri" onclick="go(2)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide" id="s2">
+  <div class="hd">
+    <div class="hd-num">02 / 08</div>
+    <div class="hd-title">L'Architecture 🏗️</div>
+    <div class="hd-sub">Le système est construit en plusieurs couches superposées</div>
+  </div>
+  <div class="body">
+    <div class="two">
+      <div class="schema">
+        <div class="sbox"><div class="sbox-icon">💻</div><div class="sbox-text"><strong>Le Matériel (Hardware)</strong><div class="sbox-desc">Processeur (CPU), RAM, Disque dur/SSD, GPU</div></div></div>
+        <div class="sarrow">↓</div>
+        <div class="sbox core"><div class="sbox-icon">🧠</div><div class="sbox-text"><strong>Le Noyau Linux (Kernel)</strong><div class="sbox-desc">Le "traducteur" entre le matériel et les logiciels</div></div></div>
+        <div class="sarrow">↓</div>
+        <div class="sbox"><div class="sbox-icon">⚙️</div><div class="sbox-text"><strong>GNU / Systemd</strong><div class="sbox-desc">Outils système, gestion des services au démarrage</div></div></div>
+        <div class="sarrow">↓</div>
+        <div class="sbox"><div class="sbox-icon">⌨️</div><div class="sbox-text"><strong>Le Shell (Bash / Zsh)</strong><div class="sbox-desc">Interface ligne de commande — le terminal</div></div></div>
+        <div class="sarrow">↓</div>
+        <div class="sbox"><div class="sbox-icon">🖱️</div><div class="sbox-text"><strong>Interface Graphique (GNOME)</strong><div class="sbox-desc">Bureau, fenêtres, Wayland/X11</div></div></div>
+        <div class="sarrow">↓</div>
+        <div class="sbox"><div class="sbox-icon">📱</div><div class="sbox-text"><strong>Les Applications</strong><div class="sbox-desc">Firefox, VS Code, LibreOffice, Terminal…</div></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:11px;">
+        <div class="card au au1"><div class="ct">🧠 Le Kernel Linux</div><div class="cd">Cœur du système. Il gère la mémoire, les processus, la communication avec le matériel et la sécurité. Sans lui, rien ne fonctionne.</div></div>
+        <div class="card au au2"><div class="ct">⚙️ Systemd</div><div class="cd">Le premier processus lancé au démarrage (PID 1). Il démarre tous les services système dans le bon ordre : réseau, son, affichage…</div></div>
+        <div class="card au au3"><div class="ct">🖥️ GNOME Shell</div><div class="cd">L'environnement de bureau par défaut d'Ubuntu depuis la version 17.10. Moderne, fluide, personnalisable avec des extensions.</div></div>
+        <div class="card au au4"><div class="ct">📦 APT</div><div class="cd">Le gestionnaire de logiciels. Il télécharge, installe, met à jour et supprime les paquets depuis les dépôts officiels sécurisés.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(1,1)">← Précédent</button>
+    <div class="dots" id="d2"></div>
+    <button class="nbtn pri" onclick="go(3)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide" id="s3">
+  <div class="hd">
+    <div class="hd-num">03 / 08</div>
+    <div class="hd-title">Le Système de Fichiers 📂</div>
+    <div class="hd-sub">Fini le C:\ — sur Linux tout part de la racine /</div>
+  </div>
+  <div class="body">
+    <p class="btext au au1">Sur Windows tu as <code>C:\</code>, <code>D:\</code>… Sur Linux, il n'y a qu'un seul point de départ : la <strong>Racine</strong> notée <code>/</code> (root). Tout le système part de là — disques, périphériques USB, mémoire, tout.</p>
+    <div class="tree">
+<span class="o">/</span>  <span class="g">← La Racine (Root), point de départ de TOUT</span>
+├── <span class="o">/home</span>    <span class="g">← Vos fichiers personnels (ex: /home/ali/Documents)</span>
+├── <span class="o">/etc</span>     <span class="g">← Fichiers de configuration système (réseau, SSH…)</span>
+├── <span class="o">/var</span>     <span class="g">← Fichiers variables : logs, bases de données, caches</span>
+├── <span class="o">/bin</span>     <span class="g">← Commandes de base : ls, cp, mv, cat, bash…</span>
+├── <span class="o">/sbin</span>    <span class="g">← Commandes admin (root) : fdisk, ifconfig…</span>
+├── <span class="o">/usr</span>     <span class="g">← Applications installées & librairies utilisateur</span>
+├── <span class="o">/boot</span>    <span class="g">← Noyau Linux + chargeur GRUB (démarrage)</span>
+├── <span class="o">/dev</span>     <span class="g">← Périphériques : /dev/sda (disque), /dev/tty…</span>
+├── <span class="o">/proc</span>    <span class="g">← Infos processus en temps réel (virtuel, en RAM)</span>
+├── <span class="o">/tmp</span>     <span class="g">← Fichiers temporaires, vidé à chaque redémarrage</span>
+└── <span class="o">/root</span>    <span class="g">← Dossier personnel du super-utilisateur (root)</span>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(2,1)">← Précédent</button>
+    <div class="dots" id="d3"></div>
+    <button class="nbtn pri" onclick="go(4)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide" id="s4">
+  <div class="hd">
+    <div class="hd-num">04 / 08</div>
+    <div class="hd-title">Gestion des Logiciels (APT) 📦</div>
+    <div class="hd-sub">Pas de fichiers .exe — on passe par un gestionnaire de paquets</div>
+  </div>
+  <div class="body">
+    <p class="btext au au1">Sur Ubuntu, on n'installe pas les logiciels avec des fichiers <code>.exe</code> comme sur Windows. On utilise <strong>APT</strong> (Advanced Package Tool) qui télécharge depuis des <strong>dépôts officiels sécurisés</strong>. La commande <code>sudo</code> donne temporairement les droits d'administrateur.</p>
+    <div class="term">
+      <div class="tbar">
+        <div class="tdot" style="background:#ff5f56"></div>
+        <div class="tdot" style="background:#ffbd2e"></div>
+        <div class="tdot" style="background:#27c93f"></div>
+        <span style="font-size:12px;color:#666;margin-left:8px;font-family:'Ubuntu Mono',monospace;">ubuntu@pc:~$</span>
+      </div>
+      <div class="tbody">
+        <div class="tline"><span class="tp">$</span> <span class="tsudo">sudo</span> <span class="tc">apt update</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Mettre à jour la liste des paquets</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tsudo">sudo</span> <span class="tc">apt upgrade</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Installer toutes les mises à jour</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tsudo">sudo</span> <span class="tc">apt install firefox</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Installer le navigateur Firefox</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tsudo">sudo</span> <span class="tc">apt remove firefox</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Désinstaller Firefox</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tc">apt search vlc</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Chercher un paquet par nom</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tc">apt show nodejs</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Afficher les infos d'un paquet</span></div>
+        <div class="tline"><span class="tp">$</span> <span class="tc">dpkg -l</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tg"># Lister tous les paquets installés</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(3,1)">← Précédent</button>
+    <div class="dots" id="d4"></div>
+    <button class="nbtn pri" onclick="go(5)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide" id="s5">
+  <div class="hd">
+    <div class="hd-num">05 / 07</div>
+    <div class="hd-title">Les Différentes Saveurs (Flavors) 🎨</div>
+    <div class="hd-sub">Même moteur Ubuntu, différentes interfaces graphiques</div>
+  </div>
+  <div class="body">
+    <p class="btext au au1">Toutes les flavors partagent le même kernel Linux, les mêmes dépôts APT et le même cycle de versions. Seul l'<strong>environnement de bureau (DE)</strong> change. On choisit selon ses préférences ou la puissance de sa machine.</p>
+    <div class="flavors">
+      <div class="fcrd"><div class="fi">🟠</div><div class="fn">Ubuntu</div><div class="fd">GNOME — officiel</div><span class="ftag std">Recommandé</span></div>
+      <div class="fcrd"><div class="fi">🔵</div><div class="fn">Kubuntu</div><div class="fd">KDE Plasma</div><span class="ftag heavy">Riche & beau</span></div>
+      <div class="fcrd"><div class="fi">🐭</div><div class="fn">Xubuntu</div><div class="fd">XFCE</div><span class="ftag light">Léger</span></div>
+      <div class="fcrd"><div class="fi">🌿</div><div class="fn">Ubuntu MATE</div><div class="fd">MATE Desktop</div><span class="ftag light">Classique</span></div>
+      <div class="fcrd"><div class="fi">💡</div><div class="fn">Lubuntu</div><div class="fd">LXQt</div><span class="ftag light">Très léger</span></div>
+      <div class="fcrd"><div class="fi">🎵</div><div class="fn">Ubuntu Studio</div><div class="fd">KDE Plasma</div><span class="ftag heavy">Audio/Vidéo</span></div>
+      <div class="fcrd"><div class="fi">🎓</div><div class="fn">Edubuntu</div><div class="fd">GNOME</div><span class="ftag std">Éducation</span></div>
+      <div class="fcrd"><div class="fi">🖥️</div><div class="fn">Ubuntu Server</div><div class="fd">Aucun (CLI)</div><span class="ftag light">Serveurs</span></div>
+    </div>
+    <div class="hl au au3">
+      <strong>Desktop vs Server :</strong> Ubuntu Server n'a <strong>pas d'interface graphique</strong> — 100% terminal. Cela économise RAM et processeur. Indispensable pour les serveurs web, bases de données et déploiements cloud.
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(4,1)">← Précédent</button>
+    <div class="dots" id="d5"></div>
+    <button class="nbtn pri" onclick="go(6)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide" id="s6">
+  <div class="hd">
+    <div class="hd-num">06 / 07</div>
+    <div class="hd-title">Avantages & Inconvénients ⚖️</div>
+    <div class="hd-sub">Une analyse honnête et complète</div>
+  </div>
+  <div class="body">
+    <div class="pc">
+      <div class="pros">
+        <div class="pct">✅ Avantages</div>
+        <ul class="pci">
+          <li>🔒 <strong>Sécurité</strong> : très peu de virus, pas besoin d'antivirus</li>
+          <li>⚡ <strong>Performances</strong> : fluide même sur de vieilles machines</li>
+          <li>💰 <strong>Gratuit & Open Source</strong> : 100% libre</li>
+          <li>🧑‍💻 <strong>Paradis des devs</strong> : Docker, Git, Python, Node natifs</li>
+          <li>☁️ <strong>Cloud</strong> : standard sur AWS, GCP, Azure</li>
+          <li>🔄 <strong>Mises à jour</strong> : système entier en une commande</li>
+          <li>🌍 <strong>Communauté énorme</strong> : réponse à presque tout</li>
+          <li>🎮 <strong>Gaming en progrès</strong> : Steam + Proton de mieux en mieux</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <div class="pct">❌ Inconvénients</div>
+        <ul class="pci">
+          <li>🎨 <strong>Suite Adobe</strong> : Photoshop, Premiere… absents</li>
+          <li>📊 <strong>Microsoft Office</strong> : LibreOffice comme alternative</li>
+          <li>🎮 <strong>Jeux AAA</strong> : moins de titres natifs (en amélioration)</li>
+          <li>📚 <strong>Apprentissage</strong> : le terminal demande adaptation</li>
+          <li>🔧 <strong>Drivers</strong> : certains matériels récents mal supportés</li>
+          <li>📦 <strong>Snap</strong> : critiqué pour le démarrage lent des apps</li>
+          <li>🏢 <strong>Canonical</strong> : décisions parfois impopulaires</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(5,1)">← Précédent</button>
+    <div class="dots" id="d6"></div>
+    <button class="nbtn pri" onclick="go(7)">Suivant →</button>
+  </div>
+</div>
+
+<!-- SLIDE 7 — DEBIAN -->
+<div class="slide" id="s7">
+  <div class="hd deb">
+    <div class="hd-num">07 / 07</div>
+    <div class="hd-title">Debian — La Mère d'Ubuntu 🔴</div>
+    <div class="hd-sub">Le projet GNU/Linux le plus ancien, le plus stable, le plus influent</div>
+  </div>
+  <div class="body">
+    <div class="hl deb au au1">
+      <strong>Debian</strong>, créé en <strong>1993</strong> par Ian Murdock, est le fondement sur lequel Ubuntu est bâti. Ubuntu utilise ses paquets <code>.deb</code>, son gestionnaire APT et sa philosophie de stabilité — en y ajoutant une interface soignée, un support commercial et un rythme de publication régulier.
+    </div>
+    <div class="grid au au2">
+      <div class="card"><div class="ci">📅</div><div class="ct">Fondé en 1993</div><div class="cd">Plus de 30 ans d'existence. L'une des distros les plus anciennes encore activement maintenues et utilisées en production.</div></div>
+      <div class="card"><div class="ci">🌊</div><div class="ct">3 branches</div><div class="cd"><strong>Stable</strong> (ultra-sûr, entreprises), <strong>Testing</strong> (intermédiaire), <strong>Unstable/Sid</strong> (bleeding edge, pour développeurs).</div></div>
+      <div class="card"><div class="ci">👥</div><div class="ct">100% Communauté</div><div class="cd">Dirigé uniquement par des bénévoles. Aucune entreprise derrière. Gouvernance démocratique avec vote des développeurs officiels.</div></div>
+      <div class="card"><div class="ci">🧩</div><div class="ct">Influence massive</div><div class="cd">Ubuntu, Linux Mint, Kali Linux, MX Linux, Raspbian (Raspberry Pi)… tous sont basés sur Debian.</div></div>
+    </div>
+    <div class="dcompare">
+      <div class="dcard ubu">
+        <div class="dcard-title">🟠 Ubuntu</div>
+        <div class="dcard-item">✦ Facile à installer et à utiliser</div>
+        <div class="dcard-item">✦ Support commercial (Canonical)</div>
+        <div class="dcard-item">✦ Nouvelle version tous les 6 mois</div>
+        <div class="dcard-item">✦ Logiciels plus récents</div>
+        <div class="dcard-item">✦ GNOME par défaut, très poli</div>
+        <div class="dcard-item">✦ Parfait pour débuter</div>
+      </div>
+      <div class="dcard deb">
+        <div class="dcard-title">🔴 Debian</div>
+        <div class="dcard-item">✦ Ultra-stable (préféré en prod)</div>
+        <div class="dcard-item">✦ 100% communauté, aucune entreprise</div>
+        <div class="dcard-item">✦ Cycle de publication lent (~2 ans)</div>
+        <div class="dcard-item">✦ Logiciels testés plus longtemps</div>
+        <div class="dcard-item">✦ Choix libre du DE à l'installation</div>
+        <div class="dcard-item">✦ Pour utilisateurs avancés</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav">
+    <button class="nbtn" onclick="go(6,1)">← Précédent</button>
+    <div class="dots" id="d7"></div>
+    <button class="nbtn" style="opacity:.4;cursor:default" disabled>Fin ✓</button>
+  </div>
+</div>
+
+<div class="ctr" id="ctr">Slide 1 / 8 — Utilisez ← → du clavier pour naviguer</div>
+</div>
+<script>
+let cur=0,total=8;
+function upd(){
+  for(let i=0;i<total;i++){
+    const c=document.getElementById('d'+i);
+    if(!c)continue;
+    c.innerHTML='';
+    for(let j=0;j<total;j++){
+      const d=document.createElement('div');
+      d.className='dot'+(j===cur?' active':'');
+      d.onclick=(n=>()=>{if(n!==cur)go(n,n<cur);})(j);
+      c.appendChild(d);
+    }
+  }
+  document.getElementById('pf').style.width=((cur+1)/total*100)+'%';
+  document.getElementById('ctr').textContent='Slide '+(cur+1)+' / '+total+' — Utilisez ← → du clavier pour naviguer';
+}
+function go(n,back){
+  const p=document.getElementById('s'+cur),x=document.getElementById('s'+n);
+  if(!x)return;
+  p.classList.remove('active');
+  x.classList.remove('back');
+  if(back)x.classList.add('back');
+  x.classList.add('active');
+  cur=n;upd();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'&&cur<total-1)go(cur+1,0);
+  if(e.key==='ArrowLeft'&&cur>0)go(cur-1,1);
+});
+upd();
+</script>
+</body>
+</html>
