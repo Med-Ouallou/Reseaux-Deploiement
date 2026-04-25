@@ -359,5 +359,3 @@ Une nouvelle version sort tous les 6 mois (Avril et Octobre).
 
 ## Merci pour votre attention !
 
-systemd kaydir gestion dyal demarrage w services w gnome howa interface graphique li kanchofoha f bureau dyak ubuntu
-APT est un gestionnaire de paquets qui permet d’installer, mettre à jour et supprimer des logiciels à partir des dépôts officiels de Ubuntu.
