@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Présentation - Lab Ubuntu</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* 
+  Design propre, pédagogique et clair pour faciliter l'explication.
+  Pas de décorations inutiles, focus sur la lisibilité et l'information.
+*/
+:root {
+  --primary: #E95420; /* Orange Ubuntu */
+  --secondary: #772953; /* Aubergine Canonical */
+  --bg: #F4F7F6;
+  --text-main: #2D3748;
+  --text-muted: #718096;
+  --card-bg: #FFFFFF;
+  --border: #E2E8F0;
+  --accent-blue: #3182CE;
+  --accent-green: #38A169;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.presentation-container {
+  width: 100%; max-width: 960px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  min-height: 600px;
+}
+
+/* En-tête et barre de progression */
+.header-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 30px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px; font-weight: 500; color: var(--text-muted);
+}
+.progress-container { flex: 1; margin: 0 30px; height: 6px; background: #EDF2F7; border-radius: 3px; overflow: hidden; }
+.progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.4s ease; }
+.slide-counter { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* Zone des slides */
+.slides-wrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+  background: #FFFFFF;
+}
+
+.slide {
+  display: none; flex-direction: column; flex: 1; 
+  padding: 40px 50px; 
+  animation: fadeIn 0.4s ease-out;
+}
+.slide.active { display: flex; }
+
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(10px); } 
+  to { opacity: 1; transform: none; } 
+}
+
+/* Typographie des titres */
+.slide-title { 
+  font-size: 32px; font-weight: 700; color: var(--secondary); 
+  margin-bottom: 30px; border-bottom: 3px solid var(--primary); 
+  padding-bottom: 10px; display: inline-block; 
+}
+.hero-container {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; height: 100%;
+}
+.hero-eyebrow {
+  color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 14px; margin-bottom: 15px;
+}
+.hero-title { 
+  font-size: 48px; font-weight: 800; color: var(--text-main); 
+  margin-bottom: 20px; line-height: 1.2; 
+}
+.hero-subtitle { 
+  font-size: 20px; color: var(--text-muted); max-width: 600px;
+}
+
+/* Contenu des slides */
+.content-text { font-size: 18px; margin-bottom: 20px; color: var(--text-main); }
+.content-text strong { color: var(--secondary); }
+
+/* Grilles et Cartes */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 15px; }
+.info-card {
+  background: #F8FAFC; border: 1px solid var(--border); border-radius: 8px;
+  padding: 24px; transition: transform 0.2s;
+}
+.info-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.info-card-title { 
+  font-size: 19px; font-weight: 700; margin-bottom: 12px; 
+  color: var(--secondary); display: flex; align-items: center; gap: 10px;
+}
+.info-card-text { font-size: 16px; color: var(--text-muted); line-height: 1.7; }
+
+/* Listes explicatives */
+ul.styled-list { list-style: none; margin-left: 0; font-size: 18px; color: var(--text-main); }
+ul.styled-list li { margin-bottom: 16px; padding-left: 30px; position: relative; line-height: 1.6; }
+ul.styled-list li::before { 
+  content: '✓'; position: absolute; left: 0; 
+  color: var(--primary); font-weight: bold; font-size: 18px; top: 0px; 
+}
+
+ul.simple-list { list-style: none; font-size: 17px; margin-top: 10px; }
+ul.simple-list li { padding: 8px 0; border-bottom: 1px solid var(--border); color: var(--text-muted); }
+ul.simple-list li:last-child { border-bottom: none; }
+ul.simple-list strong { color: var(--text-main); }
+
+/* Encadré d'information */
+.alert-box {
+  background: #EBF8FF; border-left: 4px solid var(--accent-blue);
+  padding: 16px 20px; border-radius: 0 8px 8px 0; margin-top: 20px;
+  font-size: 16px; color: #2B6CB0;
+}
+
+/* Terminal (Commandes) */
+.terminal {
+  background: #1E1E1E; border-radius: 8px; padding: 24px; margin-top: 20px;
+  font-family: 'Fira Code', monospace; font-size: 15px; color: #D4D4D4;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.terminal .line { margin-bottom: 8px; display: block; }
+.terminal .prompt { color: var(--accent-green); font-weight: 600; }
+.terminal .cmd { color: #569CD6; }
+.terminal .arg { color: #CE9178; }
+.terminal .flag { color: #DCDCAA; }
+.terminal .comment { color: #6A9955; font-style: italic; }
+
+/* Boutons de navigation */
+.controls {
+  display: flex; justify-content: space-between; padding: 20px 40px;
+  background: #F8FAFC; border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 12px 28px; font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif;
+  border-radius: 6px; cursor: pointer; transition: all 0.2s; border: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-prev { background: #EDF2F7; color: var(--text-muted); }
+.btn-prev:hover:not(:disabled) { background: #E2E8F0; color: var(--text-main); }
+.btn-next { background: var(--primary); color: #FFF; box-shadow: 0 2px 8px rgba(233,84,32,0.3); }
+.btn-next:hover:not(:disabled) { background: #D0451A; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(233,84,32,0.4); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+</style>
+</head>
+<body>
+
+<div class="presentation-container">
+  
+  <!-- Barre de progression -->
+  <div class="header-bar">
+    <div class="course-name">Lab Ubuntu</div>
+    <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="slide-counter"><span id="currentSlide">1</span> / <span id="totalSlides">7</span></div>
+  </div>
+
+  <div class="slides-wrapper">
+
+    <!-- SLIDE 0 : Couverture -->
+    <div class="slide active" id="slide-0">
+      <div class="hero-container">
+        <div class="hero-eyebrow">Présentation & Théorie</div>
+        <div class="hero-title">Installation d'Ubuntu sur une Machine Virtuelle</div>
+        <div class="hero-subtitle">Comprendre les concepts de base avant de passer à la pratique dans le Lab.</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 : C'est quoi une Machine Virtuelle ? -->
+    <div class="slide" id="slide-1">
+      <h2 class="slide-title">C'est quoi une Machine Virtuelle (VM) ?</h2>
+      <p class="content-text">
+        Une <strong>Machine Virtuelle</strong> est un logiciel qui simule le comportement d'un ordinateur complet. Elle utilise les ressources physiques de votre vrai PC (processeur, RAM, disque) pour fonctionner de manière totalement isolée.
+      </p>
+      
+      <p class="content-text" style="margin-top: 20px;">
+        Pour faire fonctionner une VM, on utilise un logiciel appelé <strong>Hyperviseur</strong>. Voici les deux principaux :
+      </p>
+
+      <div class="grid-2">
+        <div class="info-card">
+          <div class="info-card-title blue">🟦 VMware</div>
+          <ul class="simple-list">
+            <li><strong>Type :</strong> Propriétaire / Commercial</li>
+            <li><strong>Avantage :</strong> Très performant, fonctionnalités avancées pour les entreprises.</li>
+            <li><strong>Utilisation :</strong> Milieux professionnels (VMware Workstation/ESXi).</li>
+          </ul>
+        </div>
+        <div class="info-card" style="border-color: rgba(233,84,32,0.3);">
+          <div class="info-card-title" style="color: var(--primary);">🟧 VirtualBox</div>
+          <ul class="simple-list">
+            <li><strong>Type :</strong> Gratuit et Open-Source</li>
+            <li><strong>Avantage :</strong> Facile à utiliser, léger et suffisant pour l'apprentissage.</li>
+            <li><strong>Utilisation :</strong> Idéal pour les Labs et les étudiants.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 : Pourquoi utiliser une VM ? -->
+    <div class="slide" id="slide-2">
+      <h2 class="slide-title">Pourquoi utiliser une VM ?</h2>
+      <p class="content-text">
+        L'utilisation de machines virtuelles est une pratique standard en informatique. Voici les raisons principales :
+      </p>
+
+      <ul class="styled-list">
+        <li>
+          <strong>Apprentissage sans risque :</strong> Vous pouvez tester des commandes dangereuses (comme supprimer des fichiers système) sans jamais endommager votre vrai ordinateur.
+        </li>
+        <li>
+          <strong>Isolation totale :</strong> La VM est comme une "boîte fermée". Un virus ou un problème dans la VM ne touchera pas votre système principal (Windows/Mac).
+        </li>
+        <li>
+          <strong>Plusieurs systèmes en même temps :</strong> Vous pouvez avoir Windows sur votre PC physique, et utiliser Linux (Ubuntu) dans une fenêtre comme une simple application.
+        </li>
+        <li>
+          <strong>Snapshots (Instantanés) :</strong> Vous pouvez sauvegarder l'état exact de la machine à un instant T, et y revenir en 1 clic si vous faites une erreur.
+        </li>
+      </ul>
+    </div>
+
+    <!-- SLIDE 3 : Ce qu'il faut sur ton PC -->
+    <div class="slide" id="slide-3">
+      <h2 class="slide-title">Ce qu'il faut sur ton PC (Prérequis)</h2>
+      <p class="content-text">
+        Puisque la machine virtuelle va consommer les ressources de votre vrai PC, il faut s'assurer d'avoir le minimum syndical pour que Ubuntu fonctionne fluidement.
+      </p>
+
+      <div class="grid-2" style="grid-template-columns: 1fr; gap: 16px;">
+        <div class="info-card" style="display: flex; gap: 20px; align-items: center; padding: 16px 24px;">
+          <div style="font-size: 32px;">🧠</div>
+          <div>
+            <strong>Mémoire RAM :</strong> Au moins 8 Go de RAM au total sur votre PC (pour pouvoir en donner 2 à 4 Go à la machine virtuelle).
+          </div>
+        </div>
+        
+        <div class="info-card" style="display: flex; gap: 20px; align-items: center; padding: 16px 24px;">
+          <div style="font-size: 32px;">💾</div>
+          <div>
+            <strong>Espace Disque :</strong> Au moins 30 Go d'espace libre sur votre disque dur pour stocker le système Ubuntu virtuel.
+          </div>
+        </div>
+
+        <div class="info-card" style="display: flex; gap: 20px; align-items: center; padding: 16px 24px; border-left: 4px solid var(--primary);">
+          <div style="font-size: 32px;">⚙️</div>
+          <div>
+            <strong>Virtualisation du BIOS :</strong> La technologie de virtualisation (Intel VT-x ou AMD-V) <u>doit obligatoirement être activée</u> dans le BIOS de votre ordinateur.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 : C'est quoi un fichier .ISO ? -->
+    <div class="slide" id="slide-4">
+      <h2 class="slide-title">C'est quoi un fichier .ISO ?</h2>
+      <p class="content-text">
+        Pour installer un système d'exploitation, on télécharge généralement un fichier avec l'extension <strong>.iso</strong>.
+      </p>
+
+      <ul class="styled-list">
+        <li>
+          <strong>Définition :</strong> Un fichier ISO est une <em>"image disque"</em>. C'est la copie numérique exacte du contenu d'un CD ou d'un DVD d'installation.
+        </li>
+        <li>
+          <strong>Comment ça marche avec une VM ?</strong> 
+          Au lieu de graver ce fichier sur un vrai CD ou de créer une clé USB bootable, on donne simplement ce fichier directement à VirtualBox.
+        </li>
+        <li>
+          <strong>Lecteur virtuel :</strong> L'hyperviseur va simuler un lecteur CD et "insérer" ce fichier ISO virtuellement pour lancer l'installation.
+        </li>
+      </ul>
+
+      <div class="alert-box">
+        💡 <strong>Exemple :</strong> Le fichier que nous allons utiliser s'appelle <code>ubuntu-22.04-desktop-amd64.iso</code> et pèse environ 4.7 Go.
+      </div>
+    </div>
+
+    <!-- SLIDE 5 : Étapes du Lab -->
+    <div class="slide" id="slide-5">
+      <h2 class="slide-title">Passage à la pratique dans le Lab</h2>
+      <p class="content-text">
+        Maintenant que les concepts sont clairs, <strong>nous allons passer à la pratique (Le Lab)</strong>. Vous allez suivre les étapes avec nous en temps réel.
+      </p>
+
+      <div class="info-card" style="background: #FFF5F2; border-color: #FBD38D;">
+        <div class="info-card-title" style="color: var(--primary);">Ce que nous allons faire ensemble :</div>
+        <ul class="simple-list" style="margin-top: 15px;">
+          <li><strong>Étape 1 :</strong> Téléchargement de VirtualBox et de l'ISO d'Ubuntu 22.04 LTS.</li>
+          <li><strong>Étape 2 :</strong> Création de la Machine Virtuelle et allocation de la RAM et du disque dur.</li>
+          <li><strong>Étape 3 :</strong> Lancement de la VM et suivi de l'assistant d'installation Ubuntu pas à pas.</li>
+          <li><strong>Étape 4 :</strong> Premier démarrage et configuration de l'utilisateur.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 : Commandes -->
+    <div class="slide" id="slide-6">
+      <h2 class="slide-title">Les commandes pour commencer</h2>
+      <p class="content-text">
+        Une fois Ubuntu installé, nous ouvrirons le <strong>Terminal (Ctrl + Alt + T)</strong> pour taper nos premières commandes de base.
+      </p>
+
+      <div class="terminal">
+        <span class="line"><span class="comment"># 1. Toujours mettre à jour le système fraîchement installé :</span></span>
+        <span class="line">
+          <span class="prompt">ubuntu@vm:~$</span> 
+          <span class="cmd">sudo</span> <span class="arg">apt update</span> <span class="cmd">&&</span> <span class="cmd">sudo</span> <span class="arg">apt upgrade</span> <span class="flag">-y</span>
+        </span>
+        <br>
+        <span class="line"><span class="comment"># 2. Vérifier l'adresse IP de la machine virtuelle :</span></span>
+        <span class="line">
+          <span class="prompt">ubuntu@vm:~$</span> <span class="cmd">ip</span> <span class="arg">a</span>
+        </span>
+        <br>
+        <span class="line"><span class="comment"># 3. Naviguer dans les dossiers et lister le contenu :</span></span>
+        <span class="line">
+          <span class="prompt">ubuntu@vm:~$</span> <span class="cmd">cd</span> <span class="arg">/etc</span>
+        </span>
+        <span class="line">
+          <span class="prompt">ubuntu@vm:/etc$</span> <span class="cmd">ls</span> <span class="flag">-la</span>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Contrôles -->
+  <div class="controls">
+    <button class="btn btn-prev" id="btnPrev" disabled>← Précédent</button>
+    <button class="btn btn-next" id="btnNext">Suivant →</button>
+  </div>
+
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const progress = document.getElementById('progressBar');
+  const counterCurrent = document.getElementById('currentSlide');
+  const counterTotal = document.getElementById('totalSlides');
+
+  counterTotal.textContent = totalSlides;
+
+  function updateUI() {
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('active', index === currentSlide);
+    });
+
+    btnPrev.disabled = currentSlide === 0;
+    
+    if (currentSlide === totalSlides - 1) {
+      btnNext.disabled = true;
+      btnNext.textContent = "Terminé";
+    } else {
+      btnNext.disabled = false;
+      btnNext.textContent = "Suivant →";
+    }
+
+    progress.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+    counterCurrent.textContent = currentSlide + 1;
+  }
+
+  btnPrev.addEventListener('click', () => {
+    if (currentSlide > 0) { currentSlide--; updateUI(); }
+  });
+
+  btnNext.addEventListener('click', () => {
+    if (currentSlide < totalSlides - 1) { currentSlide++; updateUI(); }
+  });
+
+  // Support clavier
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) { currentSlide++; updateUI(); }
+    if (e.key === 'ArrowLeft' && currentSlide > 0) { currentSlide--; updateUI(); }
+  });
+
+  updateUI();
+</script>
+
+</body>
+</html>
